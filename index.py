@@ -18,14 +18,12 @@ def bruteForceKnapSack(capacity, items):
                 buffer.pop()
                 addedSomething = True
         if not addedSomething:
-            # store a snapshot (copy) of the current subset
             candidates.append(list(buffer))
 
     getCandidateSubsets([], 0)
 
     if not candidates:
-        return None  # or return ([], 0) depending on what you prefer
-
+        return None  
     
     best = max(candidates, key=value_of)
     best_value = value_of(best)
@@ -41,10 +39,8 @@ def bruteForceKnapSack(capacity, items):
 def knapSack(capacity, items):
     n = len(items)
 
-    # F[i][j] = max value using items 1..i with capacity j
     F = [[0] * (capacity + 1) for _ in range(n + 1)]
 
-    # Memoization table initialized with -1 except F[0][*] = 0
     for i in range(1, n + 1):
         for j in range(capacity + 1):
             F[i][j] = -1
@@ -61,19 +57,15 @@ def knapSack(capacity, items):
             F[i][j] = value
         return F[i][j]
 
-    # Fill the table
     MFKnapsack(n, capacity)
 
-    # TRACEBACK
     i, j = n, capacity
     chosen = []
 
     while i > 0 and j > 0:
-        # If value comes from above row, item not taken
         if F[i][j] == F[i - 1][j]:
             i -= 1
         else:
-            # Item was taken
             chosen.append(items[i - 1])
             j -= items[i - 1]["weight"]
             i -= 1
@@ -123,7 +115,6 @@ items = [
 ]
 
 
-# print(dt.fromtimestamp())
 capacity = 40
 t1 = time.time()
 knapSack(capacity, items)
